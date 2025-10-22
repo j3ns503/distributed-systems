@@ -8,16 +8,17 @@ public class HelloWorld {
         printThread2.start();*/
 
 
+        int threadAmount = 20;
         //Task 2
         Counter counter = new Counter();
-        Thread[] threads = new Thread[20];
+        Thread[] threads = new Thread[threadAmount];
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < threadAmount; i++) {
             threads[i] = new Thread(new CounterThread(counter));
             threads[i].start();
         }
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < threadAmount; i++) {
             try {
                 threads[i].join();
             } catch (InterruptedException e) {
