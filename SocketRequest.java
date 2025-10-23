@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.Socket;
 
 public class SocketRequest {
     public void sendHTTPRequest() {
@@ -9,18 +10,18 @@ public class SocketRequest {
         String intranetHost = "stud.fh-wedel.de";
         String host = internetHost;
         int port = 80;
-        try (java.net.Socket socket = new java.net.Socket(host, port)) {
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try (Socket socket = new Socket(host, port)) {
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            out.print("GET / HTTP/1.1\r\n");
-            out.print("Host: " + host + "\r\n");
-            out.print("Connection: close\r\n");
-            out.print("\r\n");
-            out.flush();
+            output.print("GET / HTTP/1.1\r\n");
+            output.print("Host: " + host + "\r\n");
+            output.print("Connection: close\r\n");
+            output.print("\r\n");
+            output.flush();
 
             String line;
-            while ((line = in.readLine()) != null) {
+            while ((line = input.readLine()) != null) {
                 System.out.println(line);
             }
         } catch (IOException e) {
