@@ -14,7 +14,7 @@ public class Main {
 
         /// Task2
         int port = 8080;
-        File root = new File("www");
+        File root = new File("files/");
         try (ServerSocket server = new ServerSocket(port)) {
             System.out.println("Listening on port " + port);
             while (true) {
