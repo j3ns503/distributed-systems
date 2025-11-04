@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package database;
 
-// ============ Request / Response ============
 
 message RPC_Request {
   enum Operation {
@@ -24,7 +23,6 @@ message RPC_Response {
   GetSizeResponse get_size_response = 4;
 }
 
-// ============ Request Types ============
 
 message GetRecordRequest {
   int32 index = 1;
@@ -35,7 +33,6 @@ message AddRecordRequest {
   string record = 2;
 }
 
-// ============ Response Types ============
 
 message GetRecordResponse {
   string record = 1;

@@ -32,7 +32,7 @@ public class Main {
         DatabaseServer server = new DatabaseServer(port);
         new Thread(server::start).start();
 
-        Thread.sleep(1000); // Server starten lassen
+        Thread.sleep(1000);
 
         DatabaseClient client = new DatabaseClient("127.0.0.1", port);
 
@@ -44,7 +44,7 @@ public class Main {
         client.addRecord(4106, "Quickborn");
 
         client.getRecord(4103);
-        client.getRecord(4107); // nicht vorhanden
+        client.getRecord(4107);
         client.getSize();
     }
 }
