@@ -3,6 +3,7 @@
 // source: LogMessage.proto
 // Protobuf Java Version: 4.33.0
 
+
 package logserver;
 
 @com.google.protobuf.Generated

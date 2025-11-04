@@ -1,29 +1,17 @@
-import java.io.File;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class Main {
     public static void main(String[] args) {
-        /// Task1
-       /* SocketRequest request1 = new SocketRequest();
-        request1.sendHTTPRequest();*/
 
-        /*URLpackageRequest urlpackageRequest = new URLpackageRequest();
-        urlpackageRequest.sendURLRequest();*/
+        int serverPort = 5000;
+        String logFile = "logs.txt";
+        new Thread(() -> new LogServer(serverPort, logFile).start()).start();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {}
 
-        /// Task2
-        int port = 8080;
-        File root = new File("files/");
-        try (ServerSocket server = new ServerSocket(port)) {
-            System.out.println("Listening on port " + port);
-            while (true) {
-                Socket client = server.accept();
-                new Thread(new ClientHandler(client, root)).start();
-            }
-        } catch (IOException e)  {
-            e.printStackTrace();
-        }
+        int clientPort = 5000;
+        SocketLogClient client = new SocketLogClient("127.0.0.1", clientPort);
+        client.sendLog("INFO", "Hello LogServer!");
 
     }
 }
