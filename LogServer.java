@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -29,6 +30,8 @@ public class LogServer {
     }
 
     private void handleClient(Socket client) {
+        System.out.println("Writing logs to: " + new File(logFilePath).getAbsolutePath());
+
         try {
             // 1) Nachricht aus Socket einlesen
             LogMessageOuterClass.LogMessage logMessage = LogMessageOuterClass.LogMessage.parseFrom(client.getInputStream());

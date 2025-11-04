@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package database;
+
+// ============ Request / Response ============
+
+message RPC_Request {
+  enum Operation {
+    GET_RECORD = 0;
+    ADD_RECORD = 1;
+    GET_SIZE = 2;
+  }
+
+  Operation operation = 1;
+
+  GetRecordRequest get_record = 2;
+  AddRecordRequest add_record = 3;
+}
+
+message RPC_Response {
+  bool success = 1;
+  string message = 2;
+  GetRecordResponse get_record_response = 3;
+  GetSizeResponse get_size_response = 4;
+}
+
+// ============ Request Types ============
+
+message GetRecordRequest {
+  int32 index = 1;
+}
+
+message AddRecordRequest {
+  int32 index = 1;
+  string record = 2;
+}
+
+// ============ Response Types ============
+
+message GetRecordResponse {
+  string record = 1;
+}
+
+message GetSizeResponse {
+  int32 size = 1;
+}
