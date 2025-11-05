@@ -6,14 +6,14 @@ import java.net.Socket;
 public class Main {
     public static void main(String[] args) {
         /// Task1
-       /* SocketRequest request1 = new SocketRequest();
-        request1.sendHTTPRequest();*/
+        SocketRequest request1 = new SocketRequest();
+        request1.sendHTTPRequest();
 
         /*URLpackageRequest urlpackageRequest = new URLpackageRequest();
         urlpackageRequest.sendURLRequest();*/
 
         /// Task2
-        int port = 8080;
+        /*int port = 8080;
         File root = new File("files/");
         try (ServerSocket server = new ServerSocket(port)) {
             System.out.println("Listening on port " + port);
@@ -23,7 +23,7 @@ public class Main {
             }
         } catch (IOException e)  {
             e.printStackTrace();
-        }
+        }*/
 
     }
 }

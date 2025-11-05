@@ -8,7 +8,7 @@ public class SocketRequest {
     public void sendHTTPRequest() {
         String internetHost = "fh-wedel.de";
         String intranetHost = "stud.fh-wedel.de";
-        String host = internetHost;
+        String host = intranetHost;
         int port = 80;
         try (Socket socket = new Socket(host, port)) {
             PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
