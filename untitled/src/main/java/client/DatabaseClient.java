@@ -1,68 +1,107 @@
 package client;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import database.DatabaseServiceGrpc;
-import database.Database.*;
+import javax.json.*;
+import java.io.*;
+import java.net.Socket;
 
 public class DatabaseClient {
 
-    public void run() {
+    private int requestId = 1;
 
-        ManagedChannel channel = ManagedChannelBuilder
-                .forAddress("localhost", 50051)
-                .usePlaintext()
-                .build();
+    public void run() throws Exception {
 
-        DatabaseServiceGrpc.DatabaseServiceBlockingStub stub =
-                DatabaseServiceGrpc.newBlockingStub(channel);
+        try (Socket socket = new Socket("localhost", 5000)) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-        add(stub, 4101, "Appen");
-        add(stub, 4102, "Ahrensburg");
-        add(stub, 4103, "Wedel");
-        add(stub, 4104, "Aumühle");
-        add(stub, 4105, "Seevetal");
-        add(stub, 4106, "Quickborn");
+            addRecord(out, in, 4101, "Appen");
+            addRecord(out, in, 4102, "Ahrensburg");
+            addRecord(out, in, 4103, "Wedel");
+            addRecord(out, in, 4104, "Aumühle");
+            addRecord(out, in, 4105, "Seevetal");
+            addRecord(out, in, 4106, "Quickborn");
 
-        read(stub, 4103);
-        read(stub, 4107);
+            getRecord(out, in, 4103);
+            getRecord(out, in, 4107);
 
-        getSize(stub);
-
-        channel.shutdown();
+            getSize(out, in);
+        }
     }
 
-    private void add(DatabaseServiceGrpc.DatabaseServiceBlockingStub stub,
-                     int index, String record) {
+    private void addRecord(BufferedWriter out, BufferedReader in, int key, String value) throws Exception {
 
-        AddRecordRequest req = AddRecordRequest.newBuilder()
-                .setIndex(index)
-                .setRecord(record)
+        JsonObject request = Json.createObjectBuilder()
+                .add("jsonrpc", "2.0")
+                .add("method", "addRecord")
+                .add("params", Json.createObjectBuilder()
+                        .add("key", key)
+                        .add("value", value))
+                .add("id", requestId++)
                 .build();
 
-        AddRecordResponse res = stub.addRecord(req);
+        send(out, request);
 
-        System.out.println("[ADD] " + index + " -> " + res.getSuccess());
+        JsonObject response = receive(in);
+
+        // server returns: { "result": { "success": true } }
+        boolean success = response
+                .getJsonObject("result")
+                .getBoolean("success");
+
+        System.out.println("[ADD] " + key + " -> " + success);
     }
 
-    private void read(DatabaseServiceGrpc.DatabaseServiceBlockingStub stub,
-                      int index) {
+    private void getRecord(BufferedWriter out, BufferedReader in, int key) throws Exception {
 
-        GetRecordRequest req = GetRecordRequest.newBuilder()
-                .setIndex(index)
+        JsonObject request = Json.createObjectBuilder()
+                .add("jsonrpc", "2.0")
+                .add("method", "getRecord")
+                .add("params", Json.createObjectBuilder()
+                        .add("key", key))
+                .add("id", requestId++)
                 .build();
 
-        GetRecordResponse res = stub.getRecord(req);
+        send(out, request);
 
-        String out = res.getRecord().isEmpty() ? "<not found>" : res.getRecord();
-        System.out.println("[GET] " + index + " -> " + out);
+        JsonObject response = receive(in);
+
+        // server returns: { "result": { "value": "..." } }
+        String value = response
+                .getJsonObject("result")
+                .getString("value");
+
+        System.out.println("[GET] " + key + " -> " + (value.isEmpty() ? "<not found>" : value));
     }
 
-    private void getSize(DatabaseServiceGrpc.DatabaseServiceBlockingStub stub) {
+    private void getSize(BufferedWriter out, BufferedReader in) throws Exception {
 
-        GetSizeResponse res =
-                stub.getSize(GetSizeRequest.newBuilder().build());
+        JsonObject request = Json.createObjectBuilder()
+                .add("jsonrpc", "2.0")
+                .add("method", "getSize")
+                .add("params", Json.createObjectBuilder())
+                .add("id", requestId++)
+                .build();
 
-        System.out.println("[SIZE] " + res.getSize());
+        send(out, request);
+
+        JsonObject response = receive(in);
+
+        int size = response
+                .getJsonObject("result")
+                .getInt("size");
+
+        System.out.println("[SIZE] " + size);
+    }
+
+    private void send(BufferedWriter out, JsonObject request) throws IOException {
+        out.write(request.toString());
+        out.newLine();
+        out.flush();
+    }
+
+    private JsonObject receive(BufferedReader in) throws Exception {
+        String line = in.readLine();
+        JsonReader reader = Json.createReader(new StringReader(line));
+        return reader.readObject();
     }
 }
