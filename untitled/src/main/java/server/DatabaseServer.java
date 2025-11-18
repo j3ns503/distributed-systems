@@ -36,9 +36,7 @@ public class DatabaseServer {
         }
     }
 
-    // ------------------------------
-    // gRPC-Service-Implementierung
-    // ------------------------------
+
     private class DatabaseServiceImpl extends DatabaseServiceGrpc.DatabaseServiceImplBase {
 
         @Override
