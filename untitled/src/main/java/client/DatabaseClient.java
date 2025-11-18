@@ -10,7 +10,7 @@ public class DatabaseClient {
     public void run() {
 
         ManagedChannel channel = ManagedChannelBuilder
-                .forAddress("localhost", 50051)
+                .forAddress("localhost", 5001)
                 .usePlaintext()
                 .build();
 

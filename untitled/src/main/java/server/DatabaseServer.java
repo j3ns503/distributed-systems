@@ -15,12 +15,12 @@ public class DatabaseServer {
     private Server server;
 
     public void start() throws Exception {
-        server = ServerBuilder.forPort(50051)
+        server = ServerBuilder.forPort(5001)
                 .addService(new DatabaseServiceImpl())
                 .build()
                 .start();
 
-        System.out.println("Server gestartet auf Port 50051");
+        System.out.println("Server gestartet auf Port 5001");
     }
 
     public void stop() {
