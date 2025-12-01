@@ -7,12 +7,16 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class Main {
     public static void main(String[] args) {
+
+        //exportObject: macht das Objekt remote-fähig.
+        //Stub-Datei: wie der Client das Objekt findet.
         DataBaseImpl db = new DataBaseImpl();
 
         try {
-            Remote stub = UnicastRemoteObject.exportObject(db, 0);
+            Remote stub = UnicastRemoteObject.exportObject(db, 8080);
 
             writeStubToFile("database.stub", stub);
+            System.out.println("Server running on port 8080");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -1,4 +1,5 @@
-package de.fhwedel.verteilteSysteme;
+import de.fhwedel.verteilteSysteme.DBResult;
+import de.fhwedel.verteilteSysteme.DataBase;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,16 +14,19 @@ public class ClientMain {
             // 1. Stub aus Datei laden
             DataBase db = readStubFromFile("database.stub");
 
-            // 2. Remote-Methoden testen
-            System.out.println("Initial size: " + db.getSize());
+            db.addRecord(4101, "Appen");
+            db.addRecord(4102, "Ahrensburg");
+            db.addRecord(4103, "Wedel");
+            db.addRecord(4104, "Aumühle");
+            db.addRecord(4105, "Seevetal");
+            db.addRecord(4106, "Quickborn");
 
-            db.addRecord(0, "Record A");
-            db.addRecord(1, "Record B");
+            System.out.println("Record 4103: " + db.getRecord(4103));
+            System.out.println("Record 4107: " + db.getRecord(4107));
 
-            System.out.println("Size after adds: " + db.getSize());
-            System.out.println("Record 0: " + db.getRecord(0));
-            System.out.println("Record 1: " + db.getRecord(1));
+            System.out.println(db.getSize());
 
+            System.out.println(db.getRecordObj(4103).getKey() + " " + db.getRecordObj(4103).getValue());
         } catch (Exception e) {
             e.printStackTrace();
         }
