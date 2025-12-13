@@ -1,4 +1,3 @@
-import de.fhwedel.verteilteSysteme.DBResult;
 import de.fhwedel.verteilteSysteme.DataBase;
 
 import java.io.FileInputStream;
@@ -11,7 +10,7 @@ public class ClientMain {
     public static void main(String[] args) {
 
         try {
-            // 1. Stub aus Datei laden
+
             DataBase db = readStubFromFile("database.stub");
 
             db.addRecord(4101, "Appen");
